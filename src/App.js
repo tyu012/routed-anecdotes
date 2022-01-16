@@ -5,6 +5,7 @@ import {
   Route,
   Link,
   useRouteMatch,
+  useHistory,
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -104,6 +105,14 @@ const Anecdote = ({ anecdote }) => {
   )
 }
 
+const Notification = ({ text }) => {
+  return (
+    <div>
+      <p>{text}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -128,10 +137,13 @@ const App = () => {
   const anecdote = match
     ? anecdotes.find(a => Number(a.id) === Number(match.params.id))
     : null
+  
+  const history = useHistory()
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    history.push('/')
   }
 
   const anecdoteById = (id) =>
@@ -152,6 +164,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
         <Menu />
+        {notification ? <Notification text={notification} /> : <div></div>}
         <Switch>
           <Route path='/about'>
             <About />
